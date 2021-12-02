@@ -6,8 +6,8 @@ import (
 	"advent_of_code/utils"
 )
 
-func CheckIncrease() (int, error) {
-	filePath := "/Users/ashwitha/github/advent-of-code-go/2021/day1/input.txt"
+func checkIncrease() (int, error) {
+	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day1/input.txt"
 
 	elements, err := utils.ReadNumbersFromFile(filePath)
 	if err != nil {
@@ -25,7 +25,7 @@ func CheckIncrease() (int, error) {
 }
 
 func checkIncreaseWithSlidingWindow() (int, error) {
-	filePath := "/Users/ashwitha/github/advent-of-code-go/2021/day1/input.txt"
+	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day1/input.txt"
 
 	elements, err := utils.ReadNumbersFromFile(filePath)
 	if err != nil {
@@ -51,7 +51,7 @@ func checkIncreaseWithSlidingWindow() (int, error) {
 }
 
 func main() {
-	res, err := CheckIncrease()
+	res, err := checkIncrease()
 	if err != nil {
 		fmt.Errorf("error %+v", err)
 	}
