@@ -9,106 +9,131 @@ import (
 )
 
 func calculatePower() (int64, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day3/input.txt"
-	elements, err := utils.ReadLines(filePath)
+	readings, err := getReadings()
 	if err != nil {
 		return 0, err
 	}
 
-	onesCount := make([]int, len(elements[0]))
-	for i := 0; i < len(elements); i++ {
-		convertedValue := strings.Split(elements[i], "")
-		for j := 0; j < len(elements[i]); j++ {
-			if convertedValue[j] == "1" {
-				onesCount[j]++
+	readingLength := len(readings[0])
+	countOfOnesInAllReadings := make([]int, readingLength)
+	for i := 0; i < len(readings); i++ {
+		bitValuesForReading := strings.Split(readings[i], "")
+		for position, bitValue := range bitValuesForReading {
+			if bitValue == "1" {
+				countOfOnesInAllReadings[position]++
 			}
 		}
 	}
 
-	value := ""
-	for i := 0; i < len(onesCount); i++ {
-		if onesCount[i] > (len(elements) / 2) {
-			value += "1"
+	gammaRate := findGammaRate(countOfOnesInAllReadings, readings)
+	epsilonRate := getEpsilonRate(countOfOnesInAllReadings, readings)
+	return gammaRate * epsilonRate, nil
+}
+
+func getEpsilonRate(countOfOnesInAllReadings []int, readings []string) int64 {
+	epsilonRateBinaryValue := ""
+	for i := 0; i < len(countOfOnesInAllReadings); i++ {
+		if countOfOnesInAllReadings[i] > (len(readings) / 2) {
+			epsilonRateBinaryValue += "0"
 		} else {
-			value += "0"
+			epsilonRateBinaryValue += "1"
 		}
 	}
-	firstValue:= convertBinaryToDecimal(value)
 
-	secondBinaryValue := ""
-	for i := 0; i < len(onesCount); i++ {
-		if onesCount[i] > (len(elements) / 2) {
-			secondBinaryValue += "0"
+	return convertBinaryToDecimal(epsilonRateBinaryValue)
+}
+
+func findGammaRate(countOfOnesInAllReadings []int, readings []string) int64 {
+	gammaRateInBinary := ""
+
+	for _, count := range countOfOnesInAllReadings {
+		if count > len(readings)/2 {
+			gammaRateInBinary += "1"
 		} else {
-			secondBinaryValue += "1"
+			gammaRateInBinary += "0"
 		}
 	}
-	secondValue := convertBinaryToDecimal(secondBinaryValue)
 
-	return firstValue * secondValue, nil
+	return convertBinaryToDecimal(gammaRateInBinary)
+}
+
+func getReadings() ([]string, error) {
+	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day3/input.txt"
+	elements, err := utils.ReadLines(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return elements, nil
 }
 
 func calculateLifeSupportRatingOfSubmarine() (int64, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day3/input.txt"
-
-	elements, err := utils.ReadLines(filePath)
+	elements, err := getReadings()
 	if err != nil {
 		return 0, err
 	}
 
-	var onebestValues []string
-	var zerobestValues []string
-	var bestValue = elements
+	oxygenRate := getOxygenGenerationRate(elements)
+	carbonDioxideRate := getCO2ScrubberRating(elements)
+	return oxygenRate * carbonDioxideRate, nil
+}
 
-	for k := 0; k < len(elements[0]); k++ {
-		onebestValues = []string{}
-		zerobestValues = []string{}
-		for j := 0; j < len(bestValue); j++ {
-			convertedValue := strings.Split(bestValue[j], "")
-			if convertedValue[k] == "1" {
-				onebestValues = append(onebestValues, bestValue[j])
-			} else {
-				zerobestValues = append(zerobestValues, bestValue[j])
-			}
-		}
+func getCO2ScrubberRating(ratings []string) int64 {
+	filteredRatings := ratings
+	ratingSize := len(ratings[0])
 
-		if len(onebestValues) >= len(zerobestValues) {
-			bestValue = onebestValues
+	for ratingIndex := 0; ratingIndex < ratingSize && len(filteredRatings) > 1; ratingIndex++ {
+		countOfOnes := findNumberOfOnes(filteredRatings, ratingIndex)
+		countOfZeros := len(filteredRatings) - countOfOnes
+		if countOfOnes < countOfZeros {
+			filteredRatings = getRatingsWith(1, filteredRatings, ratingIndex)
 		} else {
-			bestValue = zerobestValues
-		}
-
-		if len(bestValue) == 1 {
-			break
+			filteredRatings = getRatingsWith(0, filteredRatings, ratingIndex)
 		}
 	}
 
-	firstValue := convertBinaryToDecimal(bestValue[0])
+	return convertBinaryToDecimal(filteredRatings[0])
+}
 
-	bestValue = elements
-	for k := 0; k < len(elements[0]); k++ {
-		onebestValues = []string{}
-		zerobestValues = []string{}
-		for j := 0; j < len(bestValue); j++ {
-			convertedValue := strings.Split(bestValue[j], "")
-			if convertedValue[k] == "1" {
-				onebestValues = append(onebestValues, bestValue[j])
-			} else {
-				zerobestValues = append(zerobestValues, bestValue[j])
-			}
-		}
+func getOxygenGenerationRate(ratings []string) int64 {
+	filteredRatings := ratings
+	ratingSize := len(ratings[0])
 
-		if len(onebestValues) < len(zerobestValues) {
-			bestValue = onebestValues
+	for ratingIndex := 0; ratingIndex < ratingSize && len(filteredRatings) > 1; ratingIndex++ {
+		countOfOnes := findNumberOfOnes(filteredRatings, ratingIndex)
+		countOfZeros := len(filteredRatings) - countOfOnes
+		if countOfOnes >= countOfZeros {
+			filteredRatings = getRatingsWith(1, filteredRatings, ratingIndex)
 		} else {
-			bestValue = zerobestValues
-		}
-		if len(bestValue) == 1 {
-			break
+			filteredRatings = getRatingsWith(0, filteredRatings, ratingIndex)
 		}
 	}
-	secondValue := convertBinaryToDecimal(bestValue[0])
-	return firstValue * secondValue, nil
+
+	return convertBinaryToDecimal(filteredRatings[0])
+}
+
+func getRatingsWith(value int, ratings []string, position int) []string {
+	var filteredValues []string
+	for _, rating := range ratings {
+		stringifiedRating := strings.Split(rating, "")
+		if stringifiedRating[position] == strconv.Itoa(value) {
+			filteredValues = append(filteredValues, rating)
+		}
+	}
+
+	return filteredValues
+}
+
+func findNumberOfOnes(filteredRatings []string, ratingIndex int) int {
+	countOfOnes := 0
+
+	for _, rating := range filteredRatings {
+		convertedValue := strings.Split(rating, "")
+		if convertedValue[ratingIndex] == "1" {
+			countOfOnes++
+		}
+	}
+
+	return countOfOnes
 }
 
 func convertBinaryToDecimal(binaryReading string) int64 {
@@ -127,12 +152,12 @@ func main() {
 		fmt.Errorf("error %+v", err)
 	}
 
-	fmt.Println("result day1 part1:", res)
+	fmt.Println("result day3 part1:", res)
 
 	res, err = calculateLifeSupportRatingOfSubmarine()
 	if err != nil {
 		fmt.Errorf("error %+v", err)
 	}
 
-	fmt.Println("result day1 part2:", res)
+	fmt.Println("result day3 part2:", res)
 }
