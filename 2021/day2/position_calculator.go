@@ -8,10 +8,13 @@ import (
 	"advent_of_code/utils"
 )
 
-func calculatePosition() (int, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day2/input.txt"
+type SubmarineReading struct {
+	Name  string
+	Value int
+}
 
-	elements, err := utils.ReadLines(filePath)
+func calculatePosition() (int, error) {
+	readings, err := getSubmarineReadings()
 	if err != nil {
 		return 0, err
 	}
@@ -19,40 +22,22 @@ func calculatePosition() (int, error) {
 	horizontalPosition := 0
 	depth := 0
 
-	for i := 0; i < len(elements); i++ {
-		values := strings.Split(elements[i], " ")
-		command := values[0]
-		value, err := strconv.Atoi(values[1])
-		if err != nil {
-			fmt.Errorf("%+v", err)
-			return 0, err
-		}
-
-		switch command {
+	for _, reading := range readings {
+		switch reading.Name {
 		case "forward":
-			horizontalPosition += value
+			horizontalPosition += reading.Value
 		case "down":
-			depth += value
+			depth += reading.Value
 		case "up":
-			depth -= value
+			depth -= reading.Value
 		}
 	}
 
-	if horizontalPosition != 0 && depth !=0 {
-		return horizontalPosition * depth, nil
-	}
-
-	if horizontalPosition != 0 {
-		return horizontalPosition, nil
-	}
-
-	return depth, nil
+	return horizontalPosition * depth, nil
 }
 
 func calculatePositionWithDepthAimAndHorizontalPosition() (int, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day2/input.txt"
-
-	elements, err := utils.ReadLines(filePath)
+	readings, err := getSubmarineReadings()
 	if err != nil {
 		return 0, err
 	}
@@ -61,38 +46,44 @@ func calculatePositionWithDepthAimAndHorizontalPosition() (int, error) {
 	depth := 0
 	aim := 0
 
-	for i := 0; i < len(elements); i++ {
-		values := strings.Split(elements[i], " ")
-		command := values[0]
-		value, err := strconv.Atoi(values[1])
-		if err != nil {
-			fmt.Errorf("%+v", err)
-			return 0, err
-		}
-
-		switch command {
+	for _, reading := range readings {
+		switch reading.Name {
 		case "forward":
-			horizontalPosition += value
-			depth += aim * value
+			horizontalPosition += reading.Value
+			depth += aim * reading.Value
 		case "down":
-			aim += value
+			aim += reading.Value
 		case "up":
-			aim -= value
+			aim -= reading.Value
 		}
 	}
-
-	if horizontalPosition != 0 && depth !=0 {
-		return horizontalPosition * depth, nil
-	}
-
-	if horizontalPosition != 0 {
-		return horizontalPosition, nil
-	}
-
-	return depth, nil
+	return horizontalPosition * depth, nil
 }
 
+func getSubmarineReadings() ([]SubmarineReading, error) {
+	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day2/input.txt"
 
+	elements, err := utils.ReadLines(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	var submarineReadings []SubmarineReading
+	for i := 0; i < len(elements); i++ {
+		values := strings.Split(elements[i], " ")
+		convertedValue, err := strconv.Atoi(values[1])
+		if err != nil {
+			fmt.Errorf("%+v", err)
+			return nil, err
+		}
+		reading := SubmarineReading{
+			Name:  values[0],
+			Value: convertedValue,
+		}
+		submarineReadings = append(submarineReadings, reading)
+	}
+	return submarineReadings, nil
+}
 
 func main() {
 	res, err := calculatePosition()
