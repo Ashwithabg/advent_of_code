@@ -39,14 +39,10 @@ func main() {
 	for _, input := range inputs {
 		isGameOver, score := game.CheckBoardThatWinsLastFor(input)
 		if isGameOver {
-			fmt.Println("score", score)
-			fmt.Println("input", input)
 			fmt.Println("day4 part2 score: ", score * input)
 			break
 		}
 	}
-
-
 
 	fmt.Println("Game over")
 }

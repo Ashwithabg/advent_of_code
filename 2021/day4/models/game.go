@@ -2,7 +2,6 @@ package models
 
 import (
 	"fmt"
-	"sort"
 )
 
 type Game struct {
@@ -38,27 +37,19 @@ func (game *Game) CheckBoardThatWinsLastFor(input int) (bool, int) {
 	var boardIndexesToDelete []int
 
 	for index, board := range game.Boards {
+		board.mark(input)
 
-		for cellRowIndex, cellRow := range board.Cells {
-			for cellIndex, cell := range cellRow {
-				if cell.Value == input {
-					game.Boards[index].Cells[cellRowIndex][cellIndex].markDone()
-				}
-			}
-		}
-
-		if len(game.Boards) == 1 && (board.isRowMarked() || board.isColumnMarked()){
+		if len(game.Boards) == 1 && (board.isDone()) {
 			return true, board.calculateScore()
 		}
 
-		if board.isRowMarked() || board.isColumnMarked() {
+		if board.isDone() {
 			boardIndexesToDelete = append(boardIndexesToDelete, index)
 		}
 	}
 
-	sort.Ints(boardIndexesToDelete)
 	for index, value := range boardIndexesToDelete {
-		game.RemoveBoard(value-index)
+		game.RemoveBoard(value - index)
 	}
 
 	return false, 0
