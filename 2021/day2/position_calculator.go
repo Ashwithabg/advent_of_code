@@ -2,16 +2,7 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
-
-	"advent_of_code/utils"
 )
-
-type SubmarineReading struct {
-	Name  string
-	Value int
-}
 
 func calculatePosition(readings []SubmarineReading) int {
 	horizontalPosition := 0
@@ -19,11 +10,11 @@ func calculatePosition(readings []SubmarineReading) int {
 
 	for _, reading := range readings {
 		switch reading.Name {
-		case "forward":
+		case FORWARD:
 			horizontalPosition += reading.Value
-		case "down":
+		case DOWN:
 			depth += reading.Value
-		case "up":
+		case UP:
 			depth -= reading.Value
 		}
 	}
@@ -38,41 +29,16 @@ func calculatePositionWithDepthAimAndHorizontalPosition(readings []SubmarineRead
 
 	for _, reading := range readings {
 		switch reading.Name {
-		case "forward":
+		case FORWARD:
 			horizontalPosition += reading.Value
 			depth += aim * reading.Value
-		case "down":
+		case DOWN:
 			aim += reading.Value
-		case "up":
+		case UP:
 			aim -= reading.Value
 		}
 	}
 	return horizontalPosition * depth
-}
-
-func getSubmarineReadings() ([]SubmarineReading, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day2/input.txt"
-
-	elements, err := utils.ReadLines(filePath)
-	if err != nil {
-		return nil, err
-	}
-
-	var submarineReadings []SubmarineReading
-	for i := 0; i < len(elements); i++ {
-		values := strings.Split(elements[i], " ")
-		convertedValue, err := strconv.Atoi(values[1])
-		if err != nil {
-			fmt.Errorf("%+v", err)
-			return nil, err
-		}
-		reading := SubmarineReading{
-			Name:  values[0],
-			Value: convertedValue,
-		}
-		submarineReadings = append(submarineReadings, reading)
-	}
-	return submarineReadings, nil
 }
 
 func main() {
