@@ -29,12 +29,24 @@ func main() {
 	game.Display()
 
 	for _, input := range inputs {
-		isGameOver, score := game.PlayFor(input)
+		isGameOver, score := game.CheckBoardThatWinsFirstFor(input)
 		if isGameOver {
 			fmt.Println("day4 part1 score: ", score * input)
 			break
 		}
 	}
+
+	for _, input := range inputs {
+		isGameOver, score := game.CheckBoardThatWinsLastFor(input)
+		if isGameOver {
+			fmt.Println("score", score)
+			fmt.Println("input", input)
+			fmt.Println("day4 part2 score: ", score * input)
+			break
+		}
+	}
+
+
 
 	fmt.Println("Game over")
 }

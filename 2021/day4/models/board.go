@@ -82,3 +82,26 @@ func (board *Board) isColumnMarked() bool {
 
 	return false
 }
+
+func (board Board) isDone() bool {
+	for _, cellRow := range board.Cells {
+		for _, cell := range cellRow {
+			if !cell.isMarked() {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+func (board *Board) mark(input int) {
+	for cellRowIndex, cellRow := range board.Cells {
+		for cellIndex, cell := range cellRow {
+			if cell.Value == input {
+				board.Cells[cellRowIndex][cellIndex].markDone()
+			}
+		}
+	}
+
+}
