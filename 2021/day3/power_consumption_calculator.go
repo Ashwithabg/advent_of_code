@@ -8,12 +8,7 @@ import (
 	"advent_of_code/utils"
 )
 
-func calculatePower() (int64, error) {
-	readings, err := getReadings()
-	if err != nil {
-		return 0, err
-	}
-
+func calculatePower(readings []string) int64 {
 	readingLength := len(readings[0])
 	countOfOnesInAllReadings := make([]int, readingLength)
 	for i := 0; i < len(readings); i++ {
@@ -27,7 +22,7 @@ func calculatePower() (int64, error) {
 
 	gammaRate := findGammaRate(countOfOnesInAllReadings, readings)
 	epsilonRate := getEpsilonRate(countOfOnesInAllReadings, readings)
-	return gammaRate * epsilonRate, nil
+	return gammaRate * epsilonRate
 }
 
 func getEpsilonRate(countOfOnesInAllReadings []int, readings []string) int64 {
@@ -66,15 +61,10 @@ func getReadings() ([]string, error) {
 	return elements, nil
 }
 
-func calculateLifeSupportRatingOfSubmarine() (int64, error) {
-	elements, err := getReadings()
-	if err != nil {
-		return 0, err
-	}
-
+func calculateLifeSupportRatingOfSubmarine(elements []string) int64 {
 	oxygenRate := getOxygenGenerationRate(elements)
 	carbonDioxideRate := getCO2ScrubberRating(elements)
-	return oxygenRate * carbonDioxideRate, nil
+	return oxygenRate * carbonDioxideRate
 }
 
 func getCO2ScrubberRating(ratings []string) int64 {
@@ -147,17 +137,14 @@ func convertBinaryToDecimal(binaryReading string) int64 {
 }
 
 func main() {
-	res, err := calculatePower()
+	readings, err := getReadings()
 	if err != nil {
-		fmt.Errorf("error %+v", err)
+		fmt.Errorf("Error while parsing the input: %+v", err)
 	}
 
+	res := calculatePower(readings)
 	fmt.Println("result day3 part1:", res)
 
-	res, err = calculateLifeSupportRatingOfSubmarine()
-	if err != nil {
-		fmt.Errorf("error %+v", err)
-	}
-
+	res = calculateLifeSupportRatingOfSubmarine(readings)
 	fmt.Println("result day3 part2:", res)
 }

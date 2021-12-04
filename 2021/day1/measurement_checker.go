@@ -6,14 +6,7 @@ import (
 	"advent_of_code/utils"
 )
 
-func checkIncrease() (int, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day1/input.txt"
-
-	elements, err := utils.ReadNumbersFromFile(filePath)
-	if err != nil {
-		return 0, err
-	}
-
+func checkIncrease(elements []int) int {
 	result := 0
 	for i := 1; i < len(elements); i++ {
 		if elements[i] > elements[i-1] {
@@ -21,19 +14,13 @@ func checkIncrease() (int, error) {
 		}
 	}
 
-	return result, nil
+	return result
 }
 
-func checkIncreaseWithSlidingWindow() (int, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day1/input.txt"
-
-	elements, err := utils.ReadNumbersFromFile(filePath)
-	if err != nil {
-		return 0, err
-	}
-
+func checkIncreaseWithSlidingWindow(elements []int) int {
 	result := 0
 	previousSum := -1
+
 	for i := 0; i < len(elements)-3; i++ {
 		currentSum := 0
 		for j := i; j < i+3; j++ {
@@ -47,21 +34,28 @@ func checkIncreaseWithSlidingWindow() (int, error) {
 		previousSum = currentSum
 	}
 
-	return result, nil
+	return result
 }
 
 func main() {
-	res, err := checkIncrease()
+	elements, err := getInput()
 	if err != nil {
-		fmt.Errorf("error %+v", err)
+		fmt.Errorf("Error while parsing input: %+v", err)
 	}
 
+	res := checkIncrease(elements)
 	fmt.Println("result day1 part1:", res)
 
-	res, err = checkIncreaseWithSlidingWindow()
-	if err != nil {
-		fmt.Errorf("error %+v", err)
-	}
-
+	res = checkIncreaseWithSlidingWindow(elements)
 	fmt.Println("result day1 part2:", res)
+}
+
+func getInput() ([]int, error) {
+	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day1/input.txt"
+
+	elements, err := utils.ReadNumbersFromFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	return elements, nil
 }

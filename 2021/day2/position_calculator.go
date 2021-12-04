@@ -13,12 +13,7 @@ type SubmarineReading struct {
 	Value int
 }
 
-func calculatePosition() (int, error) {
-	readings, err := getSubmarineReadings()
-	if err != nil {
-		return 0, err
-	}
-
+func calculatePosition(readings []SubmarineReading) int {
 	horizontalPosition := 0
 	depth := 0
 
@@ -33,15 +28,10 @@ func calculatePosition() (int, error) {
 		}
 	}
 
-	return horizontalPosition * depth, nil
+	return horizontalPosition * depth
 }
 
-func calculatePositionWithDepthAimAndHorizontalPosition() (int, error) {
-	readings, err := getSubmarineReadings()
-	if err != nil {
-		return 0, err
-	}
-
+func calculatePositionWithDepthAimAndHorizontalPosition(readings []SubmarineReading) int {
 	horizontalPosition := 0
 	depth := 0
 	aim := 0
@@ -57,7 +47,7 @@ func calculatePositionWithDepthAimAndHorizontalPosition() (int, error) {
 			aim -= reading.Value
 		}
 	}
-	return horizontalPosition * depth, nil
+	return horizontalPosition * depth
 }
 
 func getSubmarineReadings() ([]SubmarineReading, error) {
@@ -86,17 +76,19 @@ func getSubmarineReadings() ([]SubmarineReading, error) {
 }
 
 func main() {
-	res, err := calculatePosition()
+	readings, err := getSubmarineReadings()
+	if err != nil {
+		fmt.Errorf("Error while parsing the input: %+v", err)
+	}
+
+	res := calculatePosition(readings)
 	if err != nil {
 		fmt.Errorf("error %+v", err)
 	}
 
 	fmt.Println("result day2 part1:", res)
 
-	res, err = calculatePositionWithDepthAimAndHorizontalPosition()
-	if err != nil {
-		fmt.Errorf("error %+v", err)
-	}
+	res = calculatePositionWithDepthAimAndHorizontalPosition(readings)
 
 	fmt.Println("result day2 part2:", res)
 }
