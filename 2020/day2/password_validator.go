@@ -7,16 +7,7 @@ import (
 func validatePassword(passwordDetails []PasswordDetail) int {
 	validaPasswordCounter := 0
 	for _, passwordDetail := range passwordDetails {
-
-		letterCounter := 0
-		for _, letter := range passwordDetail.password {
-			if string(letter) == passwordDetail.letter {
-				letterCounter++
-			}
-		}
-
-		if letterCounter <= passwordDetail.maxCharacter &&
-			letterCounter >= passwordDetail.minCharacter {
+		if passwordDetail.isRangeValid() {
 			validaPasswordCounter++
 		}
 	}
