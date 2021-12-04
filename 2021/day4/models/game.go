@@ -10,7 +10,7 @@ type Game struct {
 
 func (game *Game) CheckBoardThatWinsFirstFor(input int) (bool, int) {
 	for _, board := range game.Boards {
-		if board.playerWinsFor(input) {
+		if board.doesPlayerWinsFor(input) {
 			return true, board.calculateScore()
 		}
 	}
@@ -18,19 +18,11 @@ func (game *Game) CheckBoardThatWinsFirstFor(input int) (bool, int) {
 	return false, 0
 }
 
-func (game *Game) markCell(boardIndex int, cellRowIndex int, cellIndex int) {
-	game.Boards[boardIndex].markCell(cellRowIndex, cellIndex)
-}
-
 func (game Game) Display() {
 	for _, board := range game.Boards {
 		board.display()
 		fmt.Println("")
 	}
-}
-
-func (game *Game) findBoard(index int) Board {
-	return game.Boards[index]
 }
 
 func (game *Game) CheckBoardThatWinsLastFor(input int) (bool, int) {

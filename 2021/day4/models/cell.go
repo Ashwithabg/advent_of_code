@@ -17,3 +17,7 @@ func (cell *Cell) isMarked() bool{
 func (cell *Cell) display() {
 	fmt.Print(" ", cell.Value)
 }
+
+func (cell *Cell) isValue(inputValue int) bool{
+	return cell.Value == inputValue
+}

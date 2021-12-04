@@ -6,6 +6,8 @@ type Board struct {
 	Cells [][]Cell
 }
 
+const CellCount = 5
+
 func (board *Board) markCell(cellRowIndex int, cellIndex int) {
 	board.Cells[cellRowIndex][cellIndex].markDone()
 }
@@ -33,10 +35,10 @@ func (board Board) calculateScore() int {
 	return sum
 }
 
-func (board *Board) playerWinsFor(input int) bool {
+func (board *Board) doesPlayerWinsFor(input int) bool {
 	for cellRowIndex, cellRow := range board.Cells {
 		for cellIndex, cell := range cellRow {
-			if cell.Value == input {
+			if cell.isValue(input) {
 				board.markCell(cellRowIndex, cellIndex)
 			}
 		}
@@ -51,13 +53,13 @@ func (board *Board) playerWinsFor(input int) bool {
 
 func (board *Board) isRowMarked() bool {
 	for _, cellRow := range board.Cells {
-		rowWinnerCount := 0
+		markedRowCount := 0
 		for _, cell := range cellRow {
 			if cell.isMarked() {
-				rowWinnerCount++
+				markedRowCount++
 			}
 
-			if rowWinnerCount == 5 {
+			if board.doesAllCellsTraversed(markedRowCount) {
 				return true
 			}
 		}
@@ -67,20 +69,26 @@ func (board *Board) isRowMarked() bool {
 }
 
 func (board *Board) isColumnMarked() bool {
-	for rowIndex := 0; rowIndex < 5; rowIndex++ {
-		columnWinnerCount := 0
-		for columnIndex := 0; columnIndex < 5; columnIndex++ {
+	for rowIndex := 0; rowIndex < CellCount; rowIndex++ {
+		markedColumnCount := 0
+
+		for columnIndex := 0; columnIndex < CellCount; columnIndex++ {
 			if board.Cells[columnIndex][rowIndex].isMarked() {
-				columnWinnerCount++
+				markedColumnCount++
 			}
 
-			if columnWinnerCount == 5 {
+			if board.doesAllCellsTraversed(markedColumnCount) {
 				return true
 			}
 		}
 	}
 
 	return false
+}
+
+func (board *Board) doesAllCellsTraversed(columnWinnerCount int) bool {
+
+	return columnWinnerCount == CellCount
 }
 
 func (board Board) isDone() bool {
