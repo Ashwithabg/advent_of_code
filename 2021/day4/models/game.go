@@ -39,7 +39,7 @@ func (game *Game) CheckBoardThatWinsLastFor(input int) (bool, int) {
 	for index, board := range game.Boards {
 		board.mark(input)
 
-		if len(game.Boards) == 1 && (board.isDone()) {
+		if game.hasOnlyOneBoard() && board.isDone() {
 			return true, board.calculateScore()
 		}
 
@@ -53,6 +53,10 @@ func (game *Game) CheckBoardThatWinsLastFor(input int) (bool, int) {
 	}
 
 	return false, 0
+}
+
+func (game *Game) hasOnlyOneBoard() bool {
+	return len(game.Boards) == 1
 }
 
 func (game *Game) RemoveBoard(index int) {
