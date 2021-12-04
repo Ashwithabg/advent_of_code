@@ -2,7 +2,6 @@ package main
 
 import (
 	"advent_of_code/utils"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -19,9 +18,8 @@ func getInput() ([]PasswordDetail, error) {
 	for _, line := range lines {
 		words := strings.Split(line, " ")
 		numbers := strings.Split(words[0], "-")
-		fmt.Printf("%+v\n", words)
-		fmt.Printf("%+v\n", words[0])
 		letters := strings.Split(words[1], ":")
+
 		minValue, err := strconv.Atoi(numbers[0])
 		if err != nil {
 			return passwordDetails, err
