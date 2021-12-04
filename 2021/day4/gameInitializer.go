@@ -1,6 +1,8 @@
 package main
 
 import (
+	"advent_of_code/2021/day4/models"
+
 	"fmt"
 	"strconv"
 	"strings"
@@ -21,15 +23,15 @@ func getInput(line string) ([]int, error) {
 	return inputs, nil
 }
 
-func getBoards(rawData []string) (Game, error) {
-	var game Game
-	var board Board
+func getBoards(rawData []string) (models.Game, error) {
+	var game models.Game
+	var board models.Board
 	boardRowIndex := 0
 	boardIndex := 0
 
 	for index := 2; index < len(rawData); index++ {
 		if rawData[index] != "" {
-			var cells []Cell
+			var cells []models.Cell
 
 			rowValues := strings.Fields(rawData[index])
 			for _, rowValue := range rowValues {
@@ -38,7 +40,7 @@ func getBoards(rawData []string) (Game, error) {
 					return game, err
 				}
 
-				cells = append(cells, Cell{
+				cells = append(cells, models.Cell{
 					Value: convertedValue,
 				})
 			}
@@ -46,13 +48,13 @@ func getBoards(rawData []string) (Game, error) {
 			board.Cells = append(board.Cells, cells)
 			boardRowIndex++
 		} else {
-			game.boards = append(game.boards, board)
+			game.Boards = append(game.Boards, board)
 			boardIndex++
 			boardRowIndex = 0
-			board = Board{}
+			board = models.Board{}
 		}
 	}
 
-	game.boards = append(game.boards, board)
+	game.Boards = append(game.Boards, board)
 	return game, nil
 }

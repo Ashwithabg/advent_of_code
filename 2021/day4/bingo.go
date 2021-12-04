@@ -26,10 +26,10 @@ func main() {
 		return
 	}
 
-	game.display()
+	game.Display()
 
 	for _, input := range inputs {
-		isGameOver, score := game.playFor(input)
+		isGameOver, score := game.PlayFor(input)
 		if isGameOver {
 			fmt.Println("day4 part1 score: ", score * input)
 			break
