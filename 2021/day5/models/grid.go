@@ -6,92 +6,87 @@ import (
 
 type Grid [1000][1000]int
 
-func NewGridWithRowAndColumnwise(positions []Position) Grid {
+func NewGridWithRowAndColumnwise(positions []Position) *Grid {
 	var grid Grid
 	for _, position := range positions {
 		startPoint := position.startPoint
 		endPoint := position.endPoint
 
 		if startPoint.hasSameXCoordinateAs(endPoint) {
-			if startPoint.isYCoordinateLesserOrEqualTo(endPoint) {
-				for i := startPoint.y; i <= endPoint.y; i++ {
-					grid[endPoint.x][i]++
-				}
-			} else {
-				for i := endPoint.y; i <= startPoint.y; i++ {
-					grid[endPoint.x][i]++
-				}
-			}
-
+			grid.plotRow(startPoint, endPoint)
 		} else if startPoint.hasSameYCoordinateAs(endPoint) {
-			if startPoint.isXCoordinateLesserOrEqualTo(endPoint) {
-				for i := startPoint.x; i <= endPoint.x; i++ {
-					grid[i][startPoint.y]++
-				}
-			} else {
-				for i := endPoint.x; i <= startPoint.x; i++ {
-					grid[i][startPoint.y]++
-				}
-			}
+			grid.plotColumn(startPoint, endPoint)
 		}
 	}
 
-	return grid
+	return &grid
 }
 
-func NewGridWithAllThreeDirections(positions []Position) Grid {
+func NewGridWithAllThreeDirections(positions []Position) *Grid {
 	var grid Grid
 	for _, position := range positions {
 		startPoint := position.startPoint
 		endPoint := position.endPoint
 
 		if startPoint.hasSameXCoordinateAs(endPoint) {
-			if startPoint.isYCoordinateLesserOrEqualTo(endPoint) {
-				for i := startPoint.y; i <= endPoint.y; i++ {
-					grid[endPoint.x][i]++
-				}
-			} else {
-				for i := endPoint.y; i <= startPoint.y; i++ {
-					grid[endPoint.x][i]++
-				}
-			}
+			grid.plotRow(startPoint, endPoint)
 
 		} else if startPoint.hasSameYCoordinateAs(endPoint) {
-			if startPoint.isXCoordinateLesserOrEqualTo(endPoint) {
-				for i := startPoint.x; i <= endPoint.x; i++ {
-					grid[i][startPoint.y]++
-				}
-			} else {
-				for i := endPoint.x; i <= startPoint.x; i++ {
-					grid[i][startPoint.y]++
-				}
-			}
+			grid.plotColumn(startPoint, endPoint)
 		} else {
-			if endPoint.isXCoordinateLesserOrEqualTo(startPoint) &&
-				endPoint.isYCoordinateLesserOrEqualTo(startPoint) {
-
-				for column, row := endPoint.y, endPoint.x; column <= startPoint.y; column, row = column+1, row+1 {
-					grid[row][column]++
-				}
-			} else if endPoint.isXCoordinateLesserOrEqualTo(startPoint) &&
-				endPoint.isYCoordinateGreaterThan(startPoint) {
-				for i, row := endPoint.y, endPoint.x; i >= startPoint.y; i, row = i-1, row+1 {
-					grid[row][i]++
-				}
-			} else if endPoint.isXCoordinateGreaterThan(startPoint) &&
-				endPoint.isYCoordinateGreaterThan(startPoint) {
-				for i, row := endPoint.y, endPoint.x; i >= startPoint.y; i, row = i-1, row-1 {
-					grid[row][i]++
-				}
-			} else {
-				for i, row := endPoint.y, endPoint.x; i <= startPoint.y; i, row = i+1, row-1 {
-					grid[row][i]++
-				}
-			}
+			grid.plotDiagonals(endPoint, startPoint)
 		}
 	}
 
-	return grid
+	return &grid
+}
+
+func (grid *Grid) plotColumn(startPoint Point, endPoint Point) {
+	if startPoint.isXCoordinateLesserOrEqualTo(endPoint) {
+		for i := startPoint.x; i <= endPoint.x; i++ {
+			grid[i][startPoint.y]++
+		}
+	} else {
+		for i := endPoint.x; i <= startPoint.x; i++ {
+			grid[i][startPoint.y]++
+		}
+	}
+}
+
+func (grid *Grid) plotRow(startPoint Point, endPoint Point) {
+	if startPoint.isYCoordinateLesserOrEqualTo(endPoint) {
+		for i := startPoint.y; i <= endPoint.y; i++ {
+			grid[endPoint.x][i]++
+		}
+	} else {
+		for i := endPoint.y; i <= startPoint.y; i++ {
+			grid[endPoint.x][i]++
+		}
+	}
+}
+
+func (grid *Grid) plotDiagonals(endPoint Point, startPoint Point) {
+	if endPoint.isXCoordinateLesserOrEqualTo(startPoint) &&
+		endPoint.isYCoordinateLesserOrEqualTo(startPoint) {
+
+		for column, row := endPoint.y, endPoint.x; column <= startPoint.y; column, row = column+1, row+1 {
+			grid[row][column]++
+		}
+	} else if endPoint.isXCoordinateLesserOrEqualTo(startPoint) &&
+		endPoint.isYCoordinateGreaterThan(startPoint) {
+		for i, row := endPoint.y, endPoint.x; i >= startPoint.y; i, row = i-1, row+1 {
+			grid[row][i]++
+		}
+	} else if endPoint.isXCoordinateGreaterThan(startPoint) &&
+		endPoint.isYCoordinateGreaterThan(startPoint) {
+		for i, row := endPoint.y, endPoint.x; i >= startPoint.y; i, row = i-1, row-1 {
+			grid[row][i]++
+		}
+	} else {
+		for i, row := endPoint.y, endPoint.x; i <= startPoint.y; i, row = i+1, row-1 {
+			grid[row][i]++
+		}
+	}
 }
 
 func (grid Grid) display() {

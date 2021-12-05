@@ -16,7 +16,7 @@ func main() {
 	fmt.Println("result day5 part1:", res)
 
 
-	grid = models.NewGridWithAllThreeDirections(positions)
-	res = grid.CheckOverlaps()
+	secondGrid := models.NewGridWithAllThreeDirections(positions)
+	res = secondGrid.CheckOverlaps()
 	fmt.Println("result day5 part2:", res)
 }
