@@ -1,4 +1,4 @@
-package main
+package input
 
 import (
 	"advent_of_code/2021/day4/models"
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func getInput(line string) ([]int, error) {
+func GetInput(line string) ([]int, error) {
 	values := strings.Split(line, ",")
 
 	var inputs []int
@@ -23,7 +23,7 @@ func getInput(line string) ([]int, error) {
 	return inputs, nil
 }
 
-func getBoards(rawData []string) (models.Game, error) {
+func GetBoards(rawData []string) (models.Game, error) {
 	var game models.Game
 	var board models.Board
 	boardRowIndex := 0
