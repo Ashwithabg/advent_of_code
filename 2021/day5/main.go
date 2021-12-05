@@ -14,4 +14,9 @@ func main() {
 	grid := models.NewGridWithRowAndColumnwise(positions)
 	res := grid.CheckOverlaps()
 	fmt.Println("result day5 part1:", res)
+
+
+	grid = models.NewGridWithAllThreeDirections(positions)
+	res = grid.CheckOverlaps()
+	fmt.Println("result day5 part2:", res)
 }

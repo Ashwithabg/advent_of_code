@@ -20,3 +20,11 @@ func (point1 Point) isXCoordinateLesserOrEqualTo(point2 Point) bool {
 func (point1 Point) isYCoordinateLesserOrEqualTo(point2 Point) bool {
 	return point1.y <= point2.y
 }
+
+func (point1 Point) isXCoordinateGreaterThan(point2 Point) bool {
+	return point1.x > point2.x
+}
+
+func (point1 Point) isYCoordinateGreaterThan(point2 Point) bool {
+	return point1.y > point2.y
+}
