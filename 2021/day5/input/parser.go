@@ -1,4 +1,4 @@
-package main
+package input
 
 import (
 	"advent_of_code/2021/day5/models"
@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func getPositions() ([]models.Position, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day5/input1.txt"
+func GetPositions() ([]models.Position, error) {
+	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day5/input/files/input1.txt"
 
 	lines, err := utils.ReadLines(filePath)
 	if err != nil {

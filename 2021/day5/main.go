@@ -1,12 +1,13 @@
 package main
 
 import (
+	"advent_of_code/2021/day5/input"
 	"advent_of_code/2021/day5/models"
 	"fmt"
 )
 
 func main() {
-	positions, err := getPositions()
+	positions, err := input.GetPositions()
 	if err != nil {
 		fmt.Errorf("Error while parsing positions: %+v", err)
 	}
