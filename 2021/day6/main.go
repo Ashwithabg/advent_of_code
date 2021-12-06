@@ -1,11 +1,14 @@
 package main
 
 import (
+	"advent_of_code/2021/day6/input"
 	"fmt"
 )
 
+const maxTimerForFishes = 8
+const timerForFishesThatJustGaveBirth = 6
+
 func calculateNumberOfFishes(fishTimers []int, dayCount int) int {
-	const maxTimerForFishes = 8
 	fishCountWithTimers := make(map[int]int)
 
 	for _, fishTimer := range fishTimers {
@@ -13,24 +16,14 @@ func calculateNumberOfFishes(fishTimers []int, dayCount int) int {
 	}
 
 	for dayIndex := 0; dayIndex < dayCount; dayIndex++ {
-		newlyCreatedFishCountWithTimers := make(map[int]int)
+		fishesThatCanGiveBirth := fishCountWithTimers[0]
 
 		for timer := 0; timer <= maxTimerForFishes; timer++ {
-			noOfFishes := fishCountWithTimers[timer]
-
-			if timer == 0 {
-				delete(fishCountWithTimers, 0)
-				newlyCreatedFishCountWithTimers[6] += noOfFishes
-				newlyCreatedFishCountWithTimers[8] += noOfFishes
-			} else {
-				fishCountWithTimers[timer] -= noOfFishes
-				fishCountWithTimers[timer-1] += noOfFishes
-			}
+			fishCountWithTimers[timer] = fishCountWithTimers[timer+1]
 		}
 
-		for timer, numberOfFishes := range newlyCreatedFishCountWithTimers {
-			fishCountWithTimers[timer] += numberOfFishes
-		}
+		fishCountWithTimers[timerForFishesThatJustGaveBirth] += fishesThatCanGiveBirth
+		fishCountWithTimers[maxTimerForFishes] += fishesThatCanGiveBirth
 	}
 
 	sumOfFishes := 0
@@ -42,11 +35,14 @@ func calculateNumberOfFishes(fishTimers []int, dayCount int) int {
 }
 
 func main() {
-	elements, err := getInput()
+	elements, err := input.GetInput()
 	if err != nil {
 		fmt.Errorf("Error while parsing input: %+v", err)
 	}
 
-	res := calculateNumberOfFishes(elements, 256)
+	res := calculateNumberOfFishes(elements, 80)
 	fmt.Println("result day1 part1:", res)
+
+	res = calculateNumberOfFishes(elements, 256)
+	fmt.Println("result day1 part2:", res)
 }

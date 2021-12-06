@@ -1,4 +1,4 @@
-package main
+package input
 
 import (
 	"advent_of_code/utils"
@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func getInput() ([]int, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day6/input1.txt"
+func GetInput() ([]int, error) {
+	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day6/input/files/input1.txt"
 
 	lines, err := utils.ReadLines(filePath)
 	if err != nil {
