@@ -2,44 +2,39 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
-
-	"advent_of_code/utils"
 )
 
-func calculateNumberOfFishes(fishAges []int, dayCount int) int {
-	const maxAgeForFishes = 8
+func calculateNumberOfFishes(fishTimers []int, dayCount int) int {
+	const maxTimerForFishes = 8
+	fishCountWithTimers := make(map[int]int)
 
-	fishCountWithAges := make(map[int]int)
-
-	for _, fishAge := range fishAges {
-		fishCountWithAges[fishAge] += 1
+	for _, fishTimer := range fishTimers {
+		fishCountWithTimers[fishTimer] += 1
 	}
 
 	for dayIndex := 0; dayIndex < dayCount; dayIndex++ {
-		newlyCreatedFishCountWithAge := make(map[int]int)
+		newlyCreatedFishCountWithTimers := make(map[int]int)
 
-		for age := 0; age <= maxAgeForFishes; age++ {
-			noOfFishes := fishCountWithAges[age]
+		for timer := 0; timer <= maxTimerForFishes; timer++ {
+			noOfFishes := fishCountWithTimers[timer]
 
-			if age == 0 {
-				delete(fishCountWithAges, 0)
-				newlyCreatedFishCountWithAge[6] += noOfFishes
-				newlyCreatedFishCountWithAge[8] += noOfFishes
+			if timer == 0 {
+				delete(fishCountWithTimers, 0)
+				newlyCreatedFishCountWithTimers[6] += noOfFishes
+				newlyCreatedFishCountWithTimers[8] += noOfFishes
 			} else {
-				fishCountWithAges[age] -= noOfFishes
-				fishCountWithAges[age-1] += noOfFishes
+				fishCountWithTimers[timer] -= noOfFishes
+				fishCountWithTimers[timer-1] += noOfFishes
 			}
 		}
 
-		for age, numberOfFishes := range newlyCreatedFishCountWithAge {
-			fishCountWithAges[age] += numberOfFishes
+		for timer, numberOfFishes := range newlyCreatedFishCountWithTimers {
+			fishCountWithTimers[timer] += numberOfFishes
 		}
 	}
 
 	sumOfFishes := 0
-	for _, fishCount := range fishCountWithAges {
+	for _, fishCount := range fishCountWithTimers {
 		sumOfFishes += fishCount
 	}
 
@@ -54,23 +49,4 @@ func main() {
 
 	res := calculateNumberOfFishes(elements, 256)
 	fmt.Println("result day1 part1:", res)
-}
-
-func getInput() ([]int, error) {
-	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day6/input1.txt"
-
-	lines, err := utils.ReadLines(filePath)
-	if err != nil {
-		return nil, err
-	}
-
-	elements := strings.Split(lines[0], ",")
-
-	var numbers []int
-	for _, ele := range elements {
-		n, _ := strconv.Atoi(ele)
-		numbers = append(numbers, n)
-	}
-
-	return numbers, nil
 }
