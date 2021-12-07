@@ -10,54 +10,54 @@ import (
 
 const veryLargeNumber = 999999999
 
-func findLeastFuel(elements []int) int {
+func findLeastFuelWhenFuelConsumptionIsAtConstantRate(crabPositions []int) int {
 	result := 0
-	sort.Ints(elements)
-	midIndex := len(elements) / 2
-	midElement := elements[midIndex]
+	sort.Ints(crabPositions)
+	midIndex := len(crabPositions) / 2
+	midPosition := crabPositions[midIndex]
 
-	for _, ele := range elements {
-		result += utils.Abs(ele - midElement)
+	for _, currentPosition := range crabPositions {
+		result += utils.Abs(currentPosition - midPosition)
 	}
 
 	return result
 }
 
-func findLeastFuelByIteratingAllElements(elements []int) int {
-	sort.Ints(elements)
-	maxIndex := len(elements)
-	sum := veryLargeNumber
+func findLeastFuelWhenFuelConsumptionIsAtConstantRateByIteratingAllPositions(crabPositions []int) int {
+	sort.Ints(crabPositions)
+	maxIndex := len(crabPositions)
+	leastFuelConsumption := veryLargeNumber
 
-	for i := 0; i < elements[maxIndex-1]; i++ {
-		elementSums := 0
-		for _, element := range elements {
-			elementSums += utils.Abs(element - i)
+	for i := 0; i < crabPositions[maxIndex-1]; i++ {
+		fuelConsumption := 0
+		for _, position := range crabPositions {
+			fuelConsumption += utils.Abs(position - i)
 		}
 
-		if elementSums < sum {
-			sum = elementSums
+		if fuelConsumption < leastFuelConsumption {
+			leastFuelConsumption = fuelConsumption
 		}
 	}
 
-	return sum
+	return leastFuelConsumption
 }
 
-func findLeastFuelWithCounter(elements []int) int {
-	maxIndex := len(elements)
-	sum := veryLargeNumber
+func findLeastFuelWhenFuelConsumptionIsNotInConstantRate(crabPositions []int) int {
+	maxIndex := len(crabPositions)
+	leastFuelConsumption := veryLargeNumber
 
-	for i := 0; i < elements[maxIndex-1]; i++ {
-		elementSums := 0
-		for _, element := range elements {
-			elementSums +=  sumOfNaturalNumbers(utils.Abs(element - i))
+	for i := 0; i < crabPositions[maxIndex-1]; i++ {
+		fuelConsumption := 0
+		for _, position := range crabPositions {
+			fuelConsumption +=  sumOfNaturalNumbers(utils.Abs(position - i))
 		}
 
-		if elementSums < sum {
-			sum = elementSums
+		if fuelConsumption < leastFuelConsumption {
+			leastFuelConsumption = fuelConsumption
 		}
 	}
 
-	return sum
+	return leastFuelConsumption
 }
 
 func sumOfNaturalNumbers(numberOfElements int) int {
@@ -65,17 +65,17 @@ func sumOfNaturalNumbers(numberOfElements int) int {
 }
 
 func main() {
-	elements, err := input.GetInput()
+	elements, err := input.GetCrabSubmarineHorizontalPositions()
 	if err != nil {
 		fmt.Errorf("Error while parsing input: %+v", err)
 	}
 
-	res := findLeastFuel(elements)
-	fmt.Println("result findLeastFuel part1:", res)
+	res := findLeastFuelWhenFuelConsumptionIsAtConstantRate(elements)
+	fmt.Println("lead fuel consumption part1:", res)
 
-	res = findLeastFuelByIteratingAllElements(elements)
-	fmt.Println("result findLeastFuel part1:", res)
+	res = findLeastFuelWhenFuelConsumptionIsAtConstantRateByIteratingAllPositions(elements)
+	fmt.Println("lead fuel consumption part1:", res)
 
-	res = findLeastFuelWithCounter(elements)
-	fmt.Println("result findLeastFuel part2:", res)
+	res = findLeastFuelWhenFuelConsumptionIsNotInConstantRate(elements)
+	fmt.Println("lead fuel consumption part2:", res)
 }

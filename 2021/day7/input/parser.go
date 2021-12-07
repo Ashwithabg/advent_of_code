@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func GetInput() ([]int, error) {
+func GetCrabSubmarineHorizontalPositions() ([]int, error) {
 	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day7/input/files/input1.txt"
 
 	lines, err := utils.ReadLines(filePath)
