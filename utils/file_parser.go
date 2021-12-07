@@ -10,8 +10,7 @@ import (
 func ReadNumbersFromFile(filePath string) ([]int, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		fmt.Errorf("error parsing the file %+v", err)
-		return nil, err
+		return nil, fmt.Errorf("error parsing the file %+v", err)
 	}
 	defer file.Close()
 
@@ -20,7 +19,7 @@ func ReadNumbersFromFile(filePath string) ([]int, error) {
 	for scanner.Scan() {
 		element, err := strconv.Atoi(scanner.Text())
 		if err != nil {
-			fmt.Errorf("error while converting string to int %+v", err)
+			return nil, fmt.Errorf("error while converting string to int %+v", err)
 		}
 		lines = append(lines, element)
 	}
@@ -30,8 +29,7 @@ func ReadNumbersFromFile(filePath string) ([]int, error) {
 func ReadLines(filePath string) ([]string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		fmt.Errorf("error parsing the file %+v", err)
-		return nil, err
+		return nil, fmt.Errorf("error parsing the file %+v", err)
 	}
 	defer file.Close()
 

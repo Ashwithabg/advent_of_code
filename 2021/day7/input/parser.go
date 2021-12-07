@@ -1,9 +1,9 @@
 package input
 
 import (
-	"advent_of_code/utils"
-	"strconv"
 	"strings"
+
+	"advent_of_code/utils"
 )
 
 func GetCrabSubmarineHorizontalPositions() ([]int, error) {
@@ -15,11 +15,5 @@ func GetCrabSubmarineHorizontalPositions() ([]int, error) {
 	}
 
 	internalTimers := strings.Split(lines[0], ",")
-	var numbers []int
-	for _, element := range internalTimers {
-		n, _ := strconv.Atoi(element)
-		numbers = append(numbers, n)
-	}
-
-	return numbers, nil
+	return utils.ToIntSlice(internalTimers), nil
 }

@@ -9,7 +9,7 @@ func Abs(x int) int {
 	return x
 }
 
-func toInt(value string) int {
+func ToInt(value string) int {
 	number, err := strconv.Atoi(value)
 	if err!=nil {
 		panic(err)
