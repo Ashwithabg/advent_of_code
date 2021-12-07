@@ -11,11 +11,10 @@ import (
 const veryLargeNumber = 999999999
 
 func findLeastFuelWhenFuelConsumptionIsAtConstantRate(crabPositions []int) int {
-	result := 0
 	sort.Ints(crabPositions)
-	midIndex := len(crabPositions) / 2
-	midPosition := crabPositions[midIndex]
+	midPosition := utils.GetMidElement(crabPositions)
 
+	result := 0
 	for _, currentPosition := range crabPositions {
 		result += utils.Abs(currentPosition - midPosition)
 	}
@@ -47,9 +46,10 @@ func findLeastFuelWhenFuelConsumptionIsNotInConstantRate(crabPositions []int) in
 	leastFuelConsumption := veryLargeNumber
 
 	for i := 0; i < crabPositions[maxIndex-1]; i++ {
+
 		fuelConsumption := 0
 		for _, position := range crabPositions {
-			fuelConsumption +=  sumOfNaturalNumbers(utils.Abs(position - i))
+			fuelConsumption +=  utils.SummationOfNaturalNumbers(utils.Abs(position - i))
 		}
 
 		if fuelConsumption < leastFuelConsumption {
@@ -58,10 +58,6 @@ func findLeastFuelWhenFuelConsumptionIsNotInConstantRate(crabPositions []int) in
 	}
 
 	return leastFuelConsumption
-}
-
-func sumOfNaturalNumbers(numberOfElements int) int {
-	return numberOfElements * (numberOfElements + 1) / 2
 }
 
 func main() {
