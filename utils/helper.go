@@ -45,7 +45,7 @@ func SortString(value string) string {
 	return strings.Join(splittedValue, "")
 }
 
-func Overlaps(letters, anotherSetOfLetters string) int {
+func GetOverlapCount(letters, anotherSetOfLetters string) int {
 	count := 0
 	for _, letter := range letters {
 		if strings.Contains(anotherSetOfLetters, string(letter)) {

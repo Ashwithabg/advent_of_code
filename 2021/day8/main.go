@@ -115,44 +115,44 @@ func findBasedOnLength(inputs []string) [10]string {
 func isZero(wireMaps [10]string, input string) bool {
 	return wireMaps[0] == "" &&
 		len(input) == 6 &&
-		utils.Overlaps(input, wireMaps[1]) == 2 &&
-		utils.Overlaps(input, wireMaps[2]) == 4 &&
-		utils.Overlaps(input, wireMaps[3]) == 4
+		utils.GetOverlapCount(input, wireMaps[1]) == 2 &&
+		utils.GetOverlapCount(input, wireMaps[2]) == 4 &&
+		utils.GetOverlapCount(input, wireMaps[3]) == 4
 }
 
 func isSix(wireMaps [10]string, input string) bool {
 	return wireMaps[6] == "" &&
 		len(input) == 6 &&
-		utils.Overlaps(input, wireMaps[1]) == 1 &&
-		utils.Overlaps(input, wireMaps[2]) == 4
+		utils.GetOverlapCount(input, wireMaps[1]) == 1 &&
+		utils.GetOverlapCount(input, wireMaps[2]) == 4
 }
 
 func isFive(wireMaps [10]string, input string) bool {
 	return wireMaps[5] == "" &&
 		len(input) == 5 &&
-		utils.Overlaps(input, wireMaps[2]) == 3 &&
-		utils.Overlaps(input, wireMaps[4]) == 3
+		utils.GetOverlapCount(input, wireMaps[2]) == 3 &&
+		utils.GetOverlapCount(input, wireMaps[4]) == 3
 }
 
 func isNine(wireMaps [10]string, input string) bool {
 	return wireMaps[9] == "" &&
 		len(input) == 6 &&
-		utils.Overlaps(input, wireMaps[0]) == 5 &&
-		utils.Overlaps(input, wireMaps[7]) == 3
+		utils.GetOverlapCount(input, wireMaps[0]) == 5 &&
+		utils.GetOverlapCount(input, wireMaps[7]) == 3
 
 }
 
 func isThree(wireMaps [10]string, input string) bool {
 	return wireMaps[3] == "" &&
 		len(input) == 5 &&
-		utils.Overlaps(input, wireMaps[1]) == 2
+		utils.GetOverlapCount(input, wireMaps[1]) == 2
 }
 
 func isTwo(misplacedWireMaps [10]string, input string) bool {
 	return misplacedWireMaps[2] == "" &&
 		len(input) == 5 &&
-		utils.Overlaps(input, misplacedWireMaps[1]) == 1 &&
-		utils.Overlaps(input, misplacedWireMaps[4]) == 2 &&
-		utils.Overlaps(input, misplacedWireMaps[3]) == 4 &&
-		utils.Overlaps(input, misplacedWireMaps[7]) == 2
+		utils.GetOverlapCount(input, misplacedWireMaps[1]) == 1 &&
+		utils.GetOverlapCount(input, misplacedWireMaps[4]) == 2 &&
+		utils.GetOverlapCount(input, misplacedWireMaps[3]) == 4 &&
+		utils.GetOverlapCount(input, misplacedWireMaps[7]) == 2
 }
