@@ -13,3 +13,13 @@ func ToIntSlice(elements []string) []int {
 
 	return numbers
 }
+
+func SortValues(words [10]string) [10]string {
+	var sortedWords [10]string
+
+	for key, value := range words {
+		sortedWords[key] = SortString(value)
+	}
+
+	return sortedWords
+}

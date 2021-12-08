@@ -1,6 +1,10 @@
 package utils
 
-import "strconv"
+import (
+	"sort"
+	"strconv"
+	"strings"
+)
 
 func Abs(x int) int {
 	if x < 0 {
@@ -11,7 +15,7 @@ func Abs(x int) int {
 
 func ToInt(value string) int {
 	number, err := strconv.Atoi(value)
-	if err!=nil {
+	if err != nil {
 		panic(err)
 	}
 	return number
@@ -33,4 +37,20 @@ func Min(x, y int64) int64 {
 
 func SummationOfNaturalNumbers(numberOfElements int) int {
 	return numberOfElements * (numberOfElements + 1) / 2
+}
+
+func SortString(value string) string {
+	splittedValue := strings.Split(value, "")
+	sort.Strings(splittedValue)
+	return strings.Join(splittedValue, "")
+}
+
+func Overlaps(letters, anotherSetOfLetters string) int {
+	count := 0
+	for _, letter := range letters {
+		if strings.Contains(anotherSetOfLetters, string(letter)) {
+			count++
+		}
+	}
+	return count
 }

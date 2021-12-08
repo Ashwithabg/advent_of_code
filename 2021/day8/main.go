@@ -14,7 +14,7 @@ func day8fn(crabPositions []int) int {
 
 func main() {
 	fmt.Println("Start time: ", time.Now().String())
-	_, err := input.Day8Parse()
+	_, err := input.Day8Part2Parse()
 	if err != nil {
 		fmt.Errorf("Error while parsing input: %+v\n", err)
 	}
