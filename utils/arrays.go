@@ -1,5 +1,7 @@
 package utils
 
+import "sort"
+
 func GetMidElement(elements []int) int {
 	midIndex := len(elements) / 2
 	return elements[midIndex]
@@ -22,4 +24,12 @@ func SortValues(words [10]string) [10]string {
 	}
 
 	return sortedWords
+}
+
+func SortDesc(numbers []int) []int {
+	sort.Slice(numbers, func(i, j int) bool {
+		return numbers[j] < numbers[i]
+	})
+
+	return numbers
 }
