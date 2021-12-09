@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
+	"sync"
 
 	"advent_of_code/utils"
 )
+
+var wg sync.WaitGroup
 
 func findTwoNumbersThatSumTo2020(elements []int) int {
 	result := 0
@@ -40,10 +43,22 @@ func main() {
 		fmt.Errorf("Error while parsing input: %+v", err)
 	}
 
-	res := findTwoNumbersThatSumTo2020(elements)
-	fmt.Println("result day1 part1:", res)
-	res = findThreeNumbersThatSumTo2020(elements)
-	fmt.Println("result day1 part2:", res)
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		res := findTwoNumbersThatSumTo2020(elements)
+		fmt.Println("result day1 part1:", res)
+	}()
+
+	go func() {
+		defer wg.Done()
+		res := findThreeNumbersThatSumTo2020(elements)
+		fmt.Println("result day1 part2:", res)
+	}()
+
+	wg.Wait()
+
 }
 
 func getInput() ([]int, error) {
