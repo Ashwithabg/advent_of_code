@@ -32,18 +32,18 @@ func (heightMap HeightMap) FindRiskLevel() int {
 }
 
 func (heightMap HeightMap) findBasins() []int {
-	var locationCounter [1]int
-	var basinLocationCounter []int
+	var locationCounter int
+	var basins []int
 
 	for i := 0; i < len(heightMap); i++ {
 		for j := 0; j < len(heightMap[0]); j++ {
 			(&heightMap).findBasinCount(i, j, &locationCounter)
-			basinLocationCounter = append(basinLocationCounter, locationCounter[0])
-			locationCounter[0] = 0
+			basins = append(basins, locationCounter)
+			locationCounter = 0
 		}
 	}
 
-	return basinLocationCounter
+	return basins
 }
 
 func (heightMap HeightMap) findLowPoints() []int {
@@ -75,25 +75,22 @@ func (heightMap HeightMap) isLow(row int, col int) bool {
 }
 
 func (heightMap HeightMap) isValidBasinBoundary(row int, column int) bool {
-	return row >= 0 && column >= 0 &&
-		row < len(heightMap) && column < len(heightMap[0]) &&
-		heightMap[row][column] != border
+	return heightMap.isValidBoundary(row, column) && heightMap[row][column] != border
 }
 
 func (heightMap HeightMap) isValidBoundary(row int, column int) bool {
 	return row >= 0 && column >= 0 && row < len(heightMap) && column < len(heightMap[0])
 }
 
-func (heightMap *HeightMap) findBasinCount(row int, col int, locationCounter *[1]int) {
-	if heightMap.isValidBasinBoundary(row, col) {
-		(*heightMap)[row][col] = 9
-
-		locationCounter[0] = locationCounter[0] + 1
+func (heightMap *HeightMap) findBasinCount(row int, column int, locationCounter *int) {
+	if heightMap.isValidBasinBoundary(row, column) {
+		(*heightMap)[row][column] = border
+		(*locationCounter) += 1
 
 		for i := 0; i < len(moves); i++ {
 			adjacentRow := row + moves[i][0]
-			adjacentCol := col + moves[i][1]
-			heightMap.findBasinCount(adjacentRow, adjacentCol, locationCounter)
+			adjacentColumn := column + moves[i][1]
+			heightMap.findBasinCount(adjacentRow, adjacentColumn, locationCounter)
 		}
 	}
 }
