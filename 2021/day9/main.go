@@ -7,6 +7,27 @@ import (
 	"advent_of_code/utils"
 )
 
+func isLow(matrix [][]int, row int, col int) bool {
+	moves := [][]int{{0, 1}, {1, 0}, {-1, 0}, {0, -1}}
+	for i := 0; i < len(moves); i++ {
+		adjacentRow := row + moves[i][0]
+		adjacentCol := col + moves[i][1]
+		rowLength := len(matrix)
+		colLength := len(matrix[0])
+
+		if adjacentRow >= 0 &&
+			adjacentCol >= 0 &&
+			adjacentRow < rowLength &&
+			adjacentCol < colLength {
+			if matrix[row][col] >= matrix[adjacentRow][adjacentCol] {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
 func findLowPoint(elements [][]int) int {
 	var result []int
 	sum := 0
@@ -16,72 +37,9 @@ func findLowPoint(elements [][]int) int {
 
 	for i := 0; i < rowLength; i++ {
 		for j := 0; j < colLength; j++ {
-			if i != 0 &&
-				j != 0 &&
-				i+1 < rowLength &&
-				j+1 < colLength &&
-				elements[i][j] < elements[i][j-1] &&
-				elements[i][j] < elements[i][j+1] &&
-				elements[i][j] < elements[i-1][j] &&
-				elements[i][j] < elements[i+1][j] {
-
-				result = append(result, elements[i][j])
-			} else if i != 0 &&
-				j == 0 &&
-				i+1 < rowLength &&
-				j+1 < colLength &&
-				elements[i][j] < elements[i][j+1] &&
-				elements[i][j] < elements[i-1][j] &&
-				elements[i][j] < elements[i+1][j] {
-				result = append(result, elements[i][j])
-			} else if i == 0 &&
-				j != 0 &&
-				i+1 < rowLength &&
-				j+1 < colLength &&
-				elements[i][j] < elements[i][j-1] &&
-				elements[i][j] < elements[i][j+1] &&
-				elements[i][j] < elements[i+1][j] {
-				result = append(result, elements[i][j])
-			} else if i != 0 &&
-				j != 0 &&
-				i == rowLength-1 &&
-				j+1 < colLength &&
-				elements[i][j] < elements[i][j+1] &&
-				elements[i][j] < elements[i-1][j] &&
-				elements[i][j] < elements[i][j-1] {
-				result = append(result, elements[i][j])
-			} else if i != 0 &&
-				j != 0 &&
-				i+1 < rowLength &&
-				j+1 == colLength &&
-				elements[i][j] < elements[i][j-1] &&
-				elements[i][j] < elements[i+1][j] &&
-				elements[i][j] < elements[i-1][j] {
-				result = append(result, elements[i][j])
-			} else if i == 0 &&
-				j == 0 &&
-				i+1 < rowLength &&
-				j+1 < colLength &&
-				elements[i][j] < elements[i+1][j] &&
-				elements[i][j] < elements[i][j+1] {
-				result = append(result, elements[i][j])
-			} else if i != 0 && j != 0 &&
-				i+1 >= rowLength && j+1 >= colLength &&
-				elements[i][j] < elements[i-1][j] &&
-				elements[i][j] < elements[i][j-1] {
-				result = append(result, elements[i][j])
-			} else if i == 0 && j != 0 &&
-				i+1 < rowLength && j+1 >= colLength &&
-				elements[i][j] < elements[i+1][j] &&
-				elements[i][j] < elements[i][j-1] {
-				result = append(result, elements[i][j])
-			} else if i != 0 && j == 0 &&
-				i+1 >= rowLength && j+1 < colLength &&
-				elements[i][j] < elements[i-1][j] &&
-				elements[i][j] < elements[i][j+1] {
+			if isLow(elements, i, j) {
 				result = append(result, elements[i][j])
 			}
-
 		}
 	}
 
