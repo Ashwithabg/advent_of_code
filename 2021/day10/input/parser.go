@@ -3,10 +3,11 @@ package input
 import (
 	"strings"
 
+	"advent_of_code/2021/day10/models"
 	"advent_of_code/utils"
 )
 
-func GetInput() ([][]string, error) {
+func GetInput() ([]models.BracketLine, error) {
 	filePath := "/Users/ashwitha/GolandProjects/advent_of_code/2021/day10/input/files/input1.txt"
 
 	lines, err := utils.ReadLines(filePath)
@@ -14,11 +15,16 @@ func GetInput() ([][]string, error) {
 		return nil, err
 	}
 
-	var values [][]string
+	var brackets []models.BracketLine
 	for _, line := range lines {
-		val := strings.Split(line, "")
-		values = append(values, val)
+		values := strings.Split(line, "")
+
+		var bracketLine models.BracketLine
+		for _, value := range values {
+			bracketLine = append(bracketLine, models.Bracket(value))
+		}
+		brackets = append(brackets, bracketLine)
 	}
 
-	return values, nil
+	return brackets, nil
 }
