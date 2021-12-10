@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"sort"
+	"sync"
 
 	"advent_of_code/2021/day10/input"
+	"advent_of_code/utils"
 )
 
 var pointsMap = map[string]int{
@@ -21,106 +23,106 @@ var ClosingPointsMap = map[string]int{
 	"<": 4,
 }
 
-var ClosingBraces = map[string]string{
+var brackets = map[string]string{
 	"(": ")",
 	"[": "]",
 	"{": "}",
 	"<": ">",
 }
 
+var wg sync.WaitGroup
+
 func main() {
 	matrix, err := input.GetInput()
 	if err != nil {
 		fmt.Errorf("Error while parsing input: %+v", err)
 	}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		res := findCorruptedLinesScore(matrix)
+		fmt.Println("result day9 part1:", res)
 
-	res := findCorruptedLinePoints(matrix)
-	fmt.Println("result day9 part1:", res)
+	}()
 
-	res = findIncomepleteLinePoints(matrix)
-	fmt.Println("result day9 part2:", res)
+	go func() {
+		defer wg.Done()
+		res := findIncompleteLinesScore(matrix)
+		fmt.Println("result day9 part2:", res)
+	}()
+
+	defer wg.Wait()
 }
 
-func findCorruptedLinePoints(paranethesisLines [][]string) int {
+func findCorruptedLinesScore(lines [][]string) int {
 	sum := 0
-	for _, paranethesisLine := range paranethesisLines {
-		sum += findValue(paranethesisLine)
+	for _, line := range lines {
+		sum += findCorruptedScoreFor(line)
 	}
 	return sum
 }
 
-func findValue(line []string) int {
-	var stack Stack
-	var corruptedValue []string
+func findCorruptedScoreFor(line []string) int {
+	var bracketTracker utils.Stack
+	score := 0
 
 	for _, value := range line {
 		if isOpeningBraces(value) {
-			stack.Push(value)
+			bracketTracker.Push(value)
 		} else {
-			poppedValue, _ := stack.Pop()
+			poppedValue, _ := bracketTracker.Pop()
 			if isCorrupted(poppedValue, value) {
-				corruptedValue = append(corruptedValue, value)
+				score += pointsMap[value]
 			}
 		}
 	}
 
-	sum := 0
-	for _, cv := range corruptedValue {
-		sum += pointsMap[cv]
-	}
-
-	return sum
+	return score
 }
 
-func findIncomepleteLinePoints(paranethesisLines [][]string) int {
-	var values []int
-	for _, paranethesisLine := range paranethesisLines {
-		value := findIncompleteLineValue(paranethesisLine)
-		values = append(values, value)
-	}
-	fmt.Printf("%+v\n", values)
-	sort.Ints(values)
-	var data []int
-	for _, val := range values {
-		if val != 0{
-			data = append(data, val)
+func findIncompleteLinesScore(lines [][]string) int {
+	var incompleteLines []int
+	for _, line := range lines {
+		value := getIncompleteLineScoreFor(line)
+		if value != 0 {
+			incompleteLines = append(incompleteLines, value)
 		}
 	}
 
-	return data[len(data)/2]
+	sort.Ints(incompleteLines)
+	return incompleteLines[len(incompleteLines)/2]
 }
 
-func findIncompleteLineValue(line []string) int {
-	var stack Stack
-	for _, value := range line {
-		if isOpeningBraces(value) {
-			stack.Push(value)
+func getIncompleteLineScoreFor(line []string) int {
+	var stack utils.Stack
+
+	for _, bracket := range line {
+		if isOpeningBraces(bracket) {
+			stack.Push(bracket)
 		} else {
-			poppedValue, ok := stack.Pop()
-			if ok {
-				if isCorrupted(poppedValue, value) {
-					return 0
-				}
+			openingBracket, _ := stack.Pop()
+			if isCorrupted(openingBracket, bracket) {
+				return 0
 			}
 		}
 	}
 
-	sum := 0
+	score := 0
 	for stack.Size() != 0 {
 		poppedValue, _ := stack.Pop()
-		sum *= 5
-		sum += ClosingPointsMap[poppedValue]
+		score *= 5
+		score += ClosingPointsMap[poppedValue]
 	}
-	return sum
+
+	return score
 }
 
-func isOpeningBraces(value string) bool {
-	return value == "(" || value == "{" || value == "[" || value == "<"
+func isOpeningBraces(key string) bool {
+	_, ok := brackets[key]
+	return ok
 }
 
-func isCorrupted(poppedValue string, value string) bool {
-	return poppedValue == "(" && value != ")" ||
-		poppedValue == "[" && value != "]" ||
-		poppedValue == "{" && value != "}" ||
-		poppedValue == "<" && value != ">"
+func isCorrupted(openingBracket string, value string) bool {
+	closingBracket, _ := brackets[openingBracket]
+	return value != closingBracket
 }
