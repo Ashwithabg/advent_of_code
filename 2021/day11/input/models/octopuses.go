@@ -2,22 +2,22 @@ package models
 
 type OctopusGrid [][]Octopus
 
-var neibourOctopusPoints = [][]int{{0, 1}, {1, 0}, {-1, 0}, {0, -1}, {-1, -1}, {-1, 1}, {1, 1}, {1, -1}}
+var neighbourOctopusPoints = [][]int{{0, 1}, {1, 0}, {-1, 0}, {0, -1}, {-1, -1}, {-1, 1}, {1, 1}, {1, -1}}
 
 func (og *OctopusGrid) EnergizeOctopuses() {
-	for i := 0; i < 10; i++ {
-		for j := 0; j < 10; j++ {
-			(*og)[i][j].turnOffFlash()
-			(*og)[i][j].Energize()
+	for row := 0; row < 10; row++ {
+		for column := 0; column < 10; column++ {
+			(*og)[row][column].turnOffFlash()
+			(*og)[row][column].Energize()
 		}
 	}
 }
 
 func (og *OctopusGrid) FlashEnergizedOctopuses(flashCounter *int) {
-	for i := 0; i < 10; i++ {
-		for j := 0; j < 10; j++ {
-			if (*og)[i][j].isEnergized() {
-				(*og).flash(flashCounter, i, j)
+	for row := 0; row < 10; row++ {
+		for column := 0; column < 10; column++ {
+			if (*og)[row][column].isEnergized() {
+				(*og).flash(flashCounter, row, column)
 			}
 		}
 	}
@@ -28,7 +28,7 @@ func (og *OctopusGrid) flash(flashCounter *int, row int, column int) {
 	(*og)[row][column].Flash()
 	(*og)[row][column].Reset()
 
-	for _, point := range neibourOctopusPoints {
+	for _, point := range neighbourOctopusPoints {
 		adjacentRow := row + point[0]
 		adjacentCol := column + point[1]
 
